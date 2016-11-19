@@ -3,10 +3,10 @@
 
 这是demo中的两个状态下的图片：
 
-这是选中当天日期：↓↓↓↓↓↓
+这是选中当天日期：↓↓↓↓↓↓<br>
 ![](https://github.com/a363567557/Calendar/blob/master/demo_pic1.png)
 
-这是选中非当天日期：↓↓↓↓↓
+这是选中非当天日期：↓↓↓↓↓<br>
 ![](https://github.com/a363567557/Calendar/blob/master/demo_pic2.png)
 
 
