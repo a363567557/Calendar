@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
+
 import cn.cn.calendar.R;
 import cn.cn.calendar.controller.CalendarController;
 import cn.cn.calendar.view.CalendarTextView;
@@ -47,6 +49,10 @@ public class GridviewAdapter extends BaseAdapter {
         preMonthDayCalendar.setTimeInMillis(calendar.getTimeInMillis());
         preMonthDayCalendar.add(Calendar.MONTH, -1);
         dayOfWeek = monthFristDayCalendar.get(Calendar.DAY_OF_WEEK);
+//        dayOfWeek -= 1;
+//        if (dayOfWeek == 0) {
+//            dayOfWeek += 7;
+//        }
         lastDay = monthFristDayCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         preLastDay = preMonthDayCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         notifyDataSetChanged();
