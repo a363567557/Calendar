@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
 import cn.cn.calendar.R;
 
 /**
@@ -73,7 +74,7 @@ public class CalendarTextView extends TextView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+//        super.onDraw(canvas);
         if (circleX == 0) {
             circleX = getMeasuredWidth() / 2;
         }
@@ -98,6 +99,6 @@ public class CalendarTextView extends TextView {
         } else {
             textPaint.setColor(ContextCompat.getColor(this.getContext(), R.color.color_888888));
         }
-        canvas.drawText(getText().toString(), circleX, circleY + calendar_circle_indicator_width / 2, textPaint);
+        canvas.drawText(getText().toString(), circleX, circleY + calendar_circle_indicator_width / 2 - 1, textPaint);
     }
 }

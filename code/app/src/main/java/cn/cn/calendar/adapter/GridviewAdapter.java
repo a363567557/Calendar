@@ -1,17 +1,14 @@
 package cn.cn.calendar.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
-
 import cn.cn.calendar.R;
 import cn.cn.calendar.controller.CalendarController;
 import cn.cn.calendar.view.CalendarTextView;
@@ -84,26 +81,23 @@ public class GridviewAdapter extends BaseAdapter {
         }
         if (position < dayOfWeek - 1) {
             viewholder.setDate("" + (preLastDay - (dayOfWeek - position - 2)));
-            viewholder.dateTv.setBackgroundColor(Color.parseColor("#DBDBDB"));
-            viewholder.dateTv.setTextColor(Color.parseColor("#888888"));
+            viewholder.dateTv.setBackgroundColor(ContextCompat.getColor(mContext, R.color.not_current_month));
+            viewholder.dateTv.setTextColor(ContextCompat.getColor(mContext, R.color.not_current_month_textcolor));
             viewholder.dateTv.setCurrentMonth(false);
             viewholder.pointTv.setVisibility(View.INVISIBLE);
         } else if (position >= lastDay + dayOfWeek - 1) {
             viewholder.setDate("" + (position - lastDay - dayOfWeek + 2));
-            viewholder.dateTv.setBackgroundColor(Color.parseColor("#DBDBDB"));
-            viewholder.dateTv.setTextColor(Color.parseColor("#888888"));
+            viewholder.dateTv.setBackgroundColor(ContextCompat.getColor(mContext, R.color.not_current_month));
+            viewholder.dateTv.setTextColor(ContextCompat.getColor(mContext, R.color.not_current_month_textcolor));
             viewholder.dateTv.setCurrentMonth(false);
             viewholder.pointTv.setVisibility(View.INVISIBLE);
         } else {
             viewholder.setDate("" + (position - dayOfWeek + 2));
             viewholder.dateTv.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
-//            viewholder.dateTv.setBackground(mCalendarController.getNormolDrawable());
-//            viewholder.dateTv.setBackgroundResource(mCalendarController.getNormolDrawable());
             viewholder.dateTv.setSelected(false);
-            viewholder.dateTv.setTextColor(Color.parseColor("#333333"));
+            viewholder.dateTv.setTextColor(ContextCompat.getColor(mContext, R.color.current_month_textcolor));
             viewholder.dateTv.setCurrentMonth(true);
             int day = position - dayOfWeek + 1;
-//            viewholder.dateTv.setOnClickListener(calendarOnClickListener);
             if (checkContainDay(day, viewholder.dateTv)) {
                 viewholder.pointTv.setVisibility(View.VISIBLE);
             } else {
@@ -117,9 +111,7 @@ public class GridviewAdapter extends BaseAdapter {
             }
 
             if (viewholder.dateTv.isToday()) {
-//                viewholder.dateTv.setBackgroundColor(mCalendarController.getSelectedlBackground());
                 viewholder.dateTv.setSelected(true);
-//                viewholder.dateTv.setBackgroundResource(mCalendarController.getTodayDrawable());
             }
 
         }

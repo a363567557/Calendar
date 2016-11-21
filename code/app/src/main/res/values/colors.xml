@@ -4,4 +4,8 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="color_888888">#888888</color>
+    <color name="color_f1f1f1">#f1f1f1</color>
+    <color name="not_current_month">#f6f6f6</color>
+    <color name="not_current_month_textcolor">#888888</color>
+    <color name="current_month_textcolor">#333333</color>
 </resources>
