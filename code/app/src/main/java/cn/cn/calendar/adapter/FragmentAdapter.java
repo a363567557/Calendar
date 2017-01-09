@@ -2,29 +2,32 @@ package cn.cn.calendar.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.view.ViewGroup;
+
 import cn.cn.calendar.controller.CalendarController;
 import cn.cn.calendar.ui.CalendarFragment;
+
 
 /**
  * author weiwei on 2016/11/17 0017 16:24.
  */
-public class FragmentAdapter extends FragmentPagerAdapter {
+public class FragmentAdapter extends FragmentStatePagerAdapter {
     private CalendarFragment[] fragments;
-    private int mCurrentIndex = 0;
     private CalendarController mCalendarController;
-    private int mDefaultFragmetCount = 5;
+    private static int mDefaultFragmetCount = 5;
+    private ViewPager mViewPager;
 
-    public FragmentAdapter(FragmentManager fm, CalendarController calendarController) {
-        super(fm);
-        mCalendarController = calendarController;
-        init();
+    public FragmentAdapter(FragmentManager fm, CalendarController calendarController, ViewPager viewPager) {
+        this(fm, calendarController, viewPager, mDefaultFragmetCount);
     }
 
-    public FragmentAdapter(FragmentManager fm, CalendarController calendarController, int fragmentCount) {
+    public FragmentAdapter(FragmentManager fm, CalendarController calendarController, ViewPager viewPager, int fragmentCount) {
         super(fm);
         mCalendarController = calendarController;
+        mViewPager = viewPager;
         mDefaultFragmetCount = fragmentCount;
         init();
     }
@@ -32,7 +35,8 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     private void init() {
         fragments = new CalendarFragment[mDefaultFragmetCount];
         for (int i = 0; i < mDefaultFragmetCount; i++) {
-            fragments[i] = new CalendarFragment(mCalendarController);
+            fragments[i] = new CalendarFragment();
+            fragments[i].setCalendarController(mCalendarController);
         }
     }
 
@@ -44,66 +48,48 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     //得到每个item
     @Override
     public Fragment getItem(int position) {
-        return fragments[position];
+        return fragments[position % mDefaultFragmetCount];
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         //处理position。让position落在[0,fragmentList.size)中
-        position = position % fragments.length;
-        //调用原来的方法
-        return super.instantiateItem(container, position);
-    }
+        fragments[position % fragments.length].getMonth(position);
+        for (int i = 0; i < fragments.length; i++) {
+            fragments[i].cleanSelect();
+        }
 
-    private int lastPosition = -1;//fragment 是否初始化标记
+        //调用原来的方法
+        return super.instantiateItem(container, position % fragments.length);
+    }
 
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        mCalendarController.onFragmentPageChangeCallBack();
-        mCurrentIndex = position;
-        int fragmentsPosition = mCurrentIndex % fragments.length;
-        CalendarFragment preFragment;
-        CalendarFragment nextFragment;
-        if (fragmentsPosition == 0) {
-            preFragment = fragments[mDefaultFragmetCount - 1];
-            nextFragment = fragments[fragmentsPosition + 1];
-        } else if (fragmentsPosition == mDefaultFragmetCount - 1) {
-            preFragment = fragments[fragmentsPosition - 1];
-            nextFragment = fragments[0];
-        } else {
-            preFragment = fragments[fragmentsPosition - 1];
-            nextFragment = fragments[fragmentsPosition + 1];
+        int fragmentsPosition = position % fragments.length;
+        if (fragmentsPosition >= 0) {
+//            currentFragment = fragments[fragmentsPosition];
+            mCalendarController.setCurrentSelectCalendar(fragments[fragmentsPosition].getCalendar());
+//            mCalendarController.onFragmentPageChangeCallBack();
         }
-        CalendarFragment currentFragment = fragments[fragmentsPosition];
-
-        if (lastPosition != -1) {
-            if (lastPosition < position) {
-                currentFragment.onNextMonth();
-            } else if (lastPosition > position) {
-                currentFragment.onPreMonth();
-            } else {
-                currentFragment.onCurrentMonth();
-            }
-        } else {
-            currentFragment.onCurrentMonth();
-        }
-        lastPosition = position;
-        preFragment.getPreMonth();
-        nextFragment.getNextMonth();
-        super.setPrimaryItem(container, position, object);
-    }
-
-    public int currentIndext() {
-        return mCurrentIndex;
-    }
-
-    public void update() {
-        CalendarFragment calendarFragment = fragments[mCurrentIndex % fragments.length];
-        calendarFragment.onCurrentMonth();
+        super.setPrimaryItem(container, position % mDefaultFragmetCount, object);
     }
 
     public interface FragmentPageChangeCallBack {
         void onFragmentPageChangeCallBack();
     }
 
+    public CalendarFragment getCurrentFragment() {
+//        return currentFragment;
+        return fragments[mViewPager.getCurrentItem() % mDefaultFragmetCount];
+    }
+
+    @Override
+    public void destroyItem(View container, int position, Object object) {
+//        super.destroyItem(container, position % mDefaultFragmetCount, object);
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+//        super.destroyItem(container, position % mDefaultFragmetCount, object);
+    }
 }
